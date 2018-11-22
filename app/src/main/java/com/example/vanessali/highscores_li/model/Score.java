@@ -2,6 +2,7 @@ package com.example.vanessali.highscores_li.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 public class Score implements Parcelable {
 
@@ -19,8 +20,9 @@ public class Score implements Parcelable {
         name = scoreAttributes[1];
     }
 
-    private Score(Parcel p) {
-
+    private Score(Parcel in) {
+        name = in.readString();
+        score = in.readInt();
     }
 
     public int getScore() {
@@ -39,8 +41,8 @@ public class Score implements Parcelable {
         name = n_Name;
     }
 
-    public int compareTo(Score score) {
-        return 0;   // TODO
+    public int compareTo(Score in) {
+        return in.getScore() > score ? in.getScore() : score;  // TODO: Look into Integer.compareTo
     }
 
     public int describeContents() {
@@ -49,7 +51,9 @@ public class Score implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
+        dest.writeString(name);
+        dest.writeInt(score);
+        Log.i("Score", String.valueOf(flags));
     }
 
     public String toFile(){
@@ -59,15 +63,15 @@ public class Score implements Parcelable {
     private String name;
     private int score;
 
-    public Creator<Score> CREATOR = new Creator<Score>() {
+    public static final Creator<Score> CREATOR = new Creator<Score>() {
         @Override
         public Score createFromParcel(Parcel source) {
-            return null;
+            return new Score(source);
         }
 
         @Override
         public Score[] newArray(int size) {
-            return new Score[0];
+            return new Score[size];
         }
     };
 
