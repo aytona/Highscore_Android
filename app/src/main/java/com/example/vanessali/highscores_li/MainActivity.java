@@ -164,7 +164,7 @@ public class MainActivity extends Activity {
 
 
                 //display file saved message
-                Toast.makeText(this, "File Saved!!!!!",Toast.LENGTH_LONG);
+                Toast.makeText(getApplicationContext(), "File Saved!!!!!", Toast.LENGTH_LONG).show();
 
             } catch (FileNotFoundException e) {
                 DummyOutput.setText("file did not write \n" + e.toString());
