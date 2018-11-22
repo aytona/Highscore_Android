@@ -74,9 +74,6 @@ public class Score implements Parcelable {
     // TODO: Remove
     @Override
     public String toString() {
-        return "Score{" +
-                "name='" + name + '\'' +
-                ", number=" + score +
-                '}';
+        return name + "," + score + "\n";
     }
 }
