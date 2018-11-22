@@ -91,7 +91,9 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(getApplicationContext(), DisplayActivity.class);
-                intent.putParcelableArrayListExtra(LIST_NAME, scoreList);
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList(LIST_NAME, scoreList);
+                intent.putExtras(bundle);
 
                 startActivityForResult(intent, REGISTER_DISPLAY);
 
