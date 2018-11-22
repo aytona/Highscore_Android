@@ -49,6 +49,7 @@ public class MainActivity extends Activity {
 
     // use a constant for the file name
     private static final String FILE_NAME = "scores.txt";
+    private static final String LIST_NAME = "ScoreList";
     private static final int REGISTER_DISPLAY = 1;
 
 
@@ -77,7 +78,7 @@ public class MainActivity extends Activity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                validateInput();
+                validateInput();        // TODO: Change since it returns a bool
                 scoreInput.setText(null);
                 nameInput.setText(null);
 
@@ -90,7 +91,7 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(getApplicationContext(), DisplayActivity.class);
-                intent.putParcelableArrayListExtra("ScoreList", scoreList);
+                intent.putParcelableArrayListExtra(LIST_NAME, scoreList);
 
                 startActivityForResult(intent, REGISTER_DISPLAY);
 
@@ -206,7 +207,7 @@ public class MainActivity extends Activity {
 
             //getting the fis from the context method
             try {
-                fis = openFileInput("scores.txt"); //reading the stream = scores.txt
+                fis = openFileInput(FILE_NAME); //reading the stream = scores.txt
             } catch (FileNotFoundException e) {
                 return new String[0];
                 //return " TRY AGAIN CANT READ"; //try and catch for error handling
