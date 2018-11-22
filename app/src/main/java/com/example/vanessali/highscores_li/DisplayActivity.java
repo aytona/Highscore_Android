@@ -3,8 +3,11 @@ package com.example.vanessali.highscores_li;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.renderscript.RenderScript;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+
 import com.example.vanessali.highscores_li.ScoreAdapter;
 import com.example.vanessali.highscores_li.model.Score;
 
