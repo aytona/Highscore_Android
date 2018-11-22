@@ -66,7 +66,7 @@ public class Score implements Parcelable {
     public static final Creator<Score> CREATOR = new Creator<Score>() {
         @Override
         public Score createFromParcel(Parcel source) {
-            return new Score(source);
+            return new Score(source); // return the inflated object
         }
 
         @Override

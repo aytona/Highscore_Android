@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.print.pdf.PrintedPdfDocument;
 import android.view.View;
 import android.widget.Button;
@@ -135,6 +137,9 @@ public class MainActivity extends Activity {
         //writing new score to a file
         WriteFileTask writerTaskObject = new WriteFileTask();
         writerTaskObject.execute(score);
+
+
+
 
 
     }
