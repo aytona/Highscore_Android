@@ -3,28 +3,33 @@ package com.example.vanessali.highscores_li;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import com.example.vanessali.highscores_li.model.Score;
+
+
+import java.util.ArrayList;
 
 public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.myViewHolder> {
     //hold the data in the adapter
-    public String[] namesOfScores;
+    public ArrayList<Score> namesOfScores;
 
     //constructor that accepts the Scores array
-    public ScoreAdapter(String[] adaptScores){
+    public ScoreAdapter(ArrayList<Score> adaptScores){
 
         namesOfScores = adaptScores;
     }
 
     public static class myViewHolder extends RecyclerView.ViewHolder{
-        public TextView sTextView;
+        private TextView nameView;
+        private TextView scoreView;
 
         //constructor
-        public myViewHolder(TextView textView){
-            super(textView);
-            sTextView = textView;
-
+        public myViewHolder(LinearLayout layout){
+            super(layout);
+            nameView = layout.findViewById(R.id.textName);
+            scoreView = layout.findViewById(R.id.textScore);
         }
 
     }
@@ -36,15 +41,12 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.myViewHolder
     @Override
     public ScoreAdapter.myViewHolder onCreateViewHolder (ViewGroup parent, int  viewType) {
 
-        //retrieve the Textview we created
-        TextView  txtScores = (TextView) LayoutInflater.from(parent.getContext())
+        LinearLayout layout = (LinearLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.activity_display, parent, false);
 
-        //create an instance of myViewHolder
+        myViewHolder viewHolder = new myViewHolder(layout);
 
-        myViewHolder vholder = new myViewHolder(txtScores);
-
-        return vholder;
+        return viewHolder;
 
     }
 
@@ -53,12 +55,12 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.myViewHolder
     * @position is the position in the recycler View*/
     @Override
     public void onBindViewHolder(ScoreAdapter.myViewHolder holder , int position){
-        holder.sTextView.setText(namesOfScores[position]); //setting text to the position
-
+        holder.nameView.setText(namesOfScores.get(position).getName());
+        holder.scoreView.setText(namesOfScores.get(position).getScore());
     }
 
     @Override
     public int getItemCount(){
-        return namesOfScores.length; //total number of elements in the the list
+        return namesOfScores.size(); //total number of elements in the the list
     }
 }

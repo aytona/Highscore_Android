@@ -49,7 +49,7 @@ public class MainActivity extends Activity {
 
     // use a constant for the file name
     private static final String FILE_NAME = "scores.txt";
-    private static final String LIST_NAME = "ScoreList";
+    public static final String LIST_NAME = "ScoreList";
     private static final int REGISTER_DISPLAY = 1;
 
 
@@ -91,13 +91,8 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(getApplicationContext(), DisplayActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList(LIST_NAME, scoreList);
-                intent.putExtras(bundle);
-
+                intent.putParcelableArrayListExtra(LIST_NAME, scoreList);
                 startActivityForResult(intent, REGISTER_DISPLAY);
-
-
             }
         });
 
@@ -109,13 +104,6 @@ public class MainActivity extends Activity {
         });
 
 
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // TODO checkers
     }
 
     public boolean validateInput() {
