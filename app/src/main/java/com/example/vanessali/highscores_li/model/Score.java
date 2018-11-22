@@ -20,7 +20,7 @@ public class Score implements Parcelable {
         name = scoreAttributes[1];
     }
 
-    private Score(Parcel in) {
+    protected Score(Parcel in) {
         name = in.readString();
         score = in.readInt();
     }

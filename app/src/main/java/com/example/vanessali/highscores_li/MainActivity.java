@@ -112,7 +112,7 @@ public class MainActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // TODO
+        // TODO checkers
     }
 
     public boolean validateInput() {
