@@ -39,12 +39,11 @@ public class MainActivity extends Activity {
     private TextView scorePerson;
     private ArrayList<Score> scoreList;
 
-    private  TextView DummyOutput;
-
+    private TextView DummyOutput;
 
 
     // use a constant for the file name
-    private static final  String FILE_NAME = "scores.txt";
+    private static final String FILE_NAME = "scores.txt";
 
 
     @Override
@@ -63,17 +62,19 @@ public class MainActivity extends Activity {
 
         DummyOutput = findViewById(R.id.tester);
 
-        scoreList = new ArrayList<Score>();
+        scoreList = new ArrayList<>();
 
-
+        ReadFileTask readerTask = new ReadFileTask();
+        readerTask.execute();
 
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 validateInput();
-                scoreInput.setText("");
-                nameInput.setText("");
+                scoreInput.setText(null);
+                nameInput.setText(null);
+
 
             }
         });
@@ -81,14 +82,16 @@ public class MainActivity extends Activity {
         viewAllButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //WriteFile();
+                for(Score s : scoreList){
+                    DummyOutput.append(s.toString());
+                }
             }
         });
 
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              //
+                //
             }
         });
 
@@ -109,14 +112,14 @@ public class MainActivity extends Activity {
         if (name.isEmpty()) {
             nameInput.setError("Must Enter valid input");
             isInputValid = false;
-        }else {
+        } else {
             addScore(name, Integer.parseInt(score));
         }
 
         return isInputValid;
     }
 
-    public void addScore(String _name, int _number){
+    public void addScore(String _name, int _number) {
 
         //accessing Score class
         Score score = new Score(_name, _number);
@@ -124,119 +127,105 @@ public class MainActivity extends Activity {
         highScore.setText("High score:" + String.valueOf(_number));
         scorePerson.setText("By:" + _name);
 
-        Toast.makeText(this," New High Score Added ", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, " New High Score Added ", Toast.LENGTH_LONG).show();
 
         scoreList.add(score);
 
-    }
 
+        //writing new score to a file
+        WriteFileTask writerTaskObject = new WriteFileTask();
+        writerTaskObject.execute(score);
 
-    public void write(){
-        ;
-
-
-    }
-
-
-    public void read(){
 
     }
 
 
-    public class WriteFileTask extends AsyncTask<String, Integer, String>{
+    public class WriteFileTask extends AsyncTask<Score, Void, String> {
 
 
         @Override
-        protected String doInBackground(String... strings) {
+        protected String doInBackground(Score... newScore) {
             FileOutputStream fos = null; //
 
 
-
-            String score = scoreInput.getText().toString();
-            String name = nameInput.getText().toString();
-
             try {
-                fos = openFileOutput(FILE_NAME,MODE_PRIVATE);
-                OutputStreamWriter outputWriter = new OutputStreamWriter(fos); //converts from character stream to byte streams
-                outputWriter.write(score);
-                outputWriter.write(name);
+                fos = openFileOutput(FILE_NAME, MODE_APPEND);
+                PrintWriter outputWriter = new PrintWriter(fos); //converts from character stream to byte streams
+
+
+                String scoreToFile = newScore[0].toFile(); //converts score into string representation, accessing at index [0]  bc newScore is an array ,
+
+                outputWriter.println(scoreToFile);//writing the score to the file
+
                 outputWriter.close();
 
 
-                //display file saved message
-                Toast.makeText(getApplicationContext(), "File Saved!!!!!", Toast.LENGTH_LONG).show();
-
             } catch (FileNotFoundException e) {
-                DummyOutput.setText("file did not write \n" + e.toString());
-
-            } catch (IOException e) {
-                e.printStackTrace();
+                return "file not found";
             }
 
-            return null;
-        }
-
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
+            return "IT FUCKING WORKED";
         }
 
         @Override
         protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
 
         }
-
 
     }
-    //Read text from file
-    public class ReadFileTask extends AsyncTask<String, Integer, String >{
+
+
+    public class ReadFileTask extends AsyncTask<String, Integer, String[]> {
+
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            //called before doInBackground() is started
-        }
+        protected String[] doInBackground(String... strings) {
+            //Reading the file and putting it the array list
 
-        @Override
-        protected String doInBackground(String... strings) {
             FileInputStream fis;//declaring the input stream
 
             //getting the fis from the context method
             try {
-                 fis = openFileInput(FILE_NAME); //reading the stream = scores.txt
+                fis = openFileInput("scores.txt"); //reading the stream = scores.txt
             } catch (FileNotFoundException e) {
-                DummyOutput.setText("No File Found \n" + e.toString()); //try and catch for error handling
-              return null;
+                return new String[0];
+                //return " TRY AGAIN CANT READ"; //try and catch for error handling
             }
 
             Scanner scanner = new Scanner(fis);
-            StringBuilder text= new StringBuilder();
+            StringBuilder file = new StringBuilder();
 
-            while(scanner.hasNextLine()){//Keep reading the file as long as there's data
-                text.append(scanner.hasNextLine()).append("\n");//append string with line break
+            while (scanner.hasNextLine()) {//Keep reading the file as long as there's data
+                file.append(scanner.hasNextLine()).append("\n");//append string with line break
             }
             scanner.close();//close scanner = close fis
-            return text.toString(); //return the string that was read in
-        }
 
+            // literally splitting up strings OF scores.txt into individual strings
+            String fileString = file.toString();
+            String[] scoresArray = fileString.split("\\n");
+            return scoresArray;
+
+
+
+            //return file.toString(); //return the string that was read in
+        }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            //called after doInBackground() is started
+        protected void onPostExecute(String[] scoresArray) {
+            //loops through the string array turning each one into score object and adding to array list (ScoreList)
+            for(int i =0; i< scoresArray.length; i++){
+                Score newScore = new Score(scoresArray[i]); // converts line to object
+                scoreList.add(newScore);//gives object to arraylist
+
+            }
 
         }
 
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-            //called when the background task makes any progress
-        }
+
     }
-
 }
+
 
 
 
