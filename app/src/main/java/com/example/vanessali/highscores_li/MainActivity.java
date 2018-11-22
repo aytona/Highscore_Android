@@ -2,8 +2,10 @@ package com.example.vanessali.highscores_li;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.print.pdf.PrintedPdfDocument;
 import android.view.View;
 import android.widget.Button;
@@ -44,6 +46,7 @@ public class MainActivity extends Activity {
 
     // use a constant for the file name
     private static final String FILE_NAME = "scores.txt";
+    private static final int REGISTER_DISPLAY = 1;
 
 
     @Override
@@ -62,7 +65,7 @@ public class MainActivity extends Activity {
 
         DummyOutput = findViewById(R.id.tester);
 
-        scoreList = new ArrayList<>();
+        scoreList = new ArrayList<Score>();
 
         ReadFileTask readerTask = new ReadFileTask();
         readerTask.execute();
@@ -82,20 +85,31 @@ public class MainActivity extends Activity {
         viewAllButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for(Score s : scoreList){
-                    DummyOutput.append(s.toString());
-                }
+
+                Intent intent = new Intent(getApplicationContext(), DisplayActivity.class);
+                intent.putParcelableArrayListExtra("ScoreList", scoreList);
+
+                startActivityForResult(intent, REGISTER_DISPLAY);
+
+
             }
         });
 
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //
+
             }
         });
 
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // TODO
     }
 
     public boolean validateInput() {
@@ -124,6 +138,7 @@ public class MainActivity extends Activity {
         //accessing Score class
         Score score = new Score(_name, _number);
 
+
         highScore.setText("High score:" + String.valueOf(_number));
         scorePerson.setText("By:" + _name);
 
@@ -141,8 +156,6 @@ public class MainActivity extends Activity {
 
 
     public class WriteFileTask extends AsyncTask<Score, Void, String> {
-
-
         @Override
         protected String doInBackground(Score... newScore) {
             FileOutputStream fos = null; //
