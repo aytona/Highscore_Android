@@ -3,7 +3,7 @@ package com.example.vanessali.highscores_li.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Score {
+public class Score implements Parcelable {
 
     public Score(String userName ,int userNumber){ //if using to string you need to add display string in the paramters
         name = userName;
@@ -44,7 +44,12 @@ public class Score {
     }
 
     public int describeContents() {
-        return 0; // TODO Parcelable
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
     }
 
     public String toFile(){
@@ -53,6 +58,18 @@ public class Score {
 
     private String name;
     private int score;
+
+    public Creator<Score> CREATOR = new Creator<Score>() {
+        @Override
+        public Score createFromParcel(Parcel source) {
+            return null;
+        }
+
+        @Override
+        public Score[] newArray(int size) {
+            return new Score[0];
+        }
+    };
 
     // TODO: Remove
     @Override
