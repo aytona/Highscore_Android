@@ -9,10 +9,11 @@ import org.w3c.dom.Text;
 
 public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.myViewHolder> {
     //hold the data in the adapter
-    private String[] namesOfScores;
+    public String[] namesOfScores;
 
     //constructor that accepts the Scores array
     public ScoreAdapter(String[] adaptScores){
+
         namesOfScores = adaptScores;
     }
 
@@ -34,6 +35,7 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.myViewHolder
 
     @Override
     public ScoreAdapter.myViewHolder onCreateViewHolder (ViewGroup parent, int  viewType) {
+
         //retrieve the Textview we created
         TextView  txtScores = (TextView) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.activity_display, parent, false);
