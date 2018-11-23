@@ -80,7 +80,8 @@ public class MainActivity extends Activity {
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                scoreList.clear();
+                updateTextView();
             }
         });
     }
@@ -98,13 +99,25 @@ public class MainActivity extends Activity {
         return isInputValid;
     }
 
+    private void updateTextView() {
+        StringBuilder scoreText = new StringBuilder();
+        scoreText.append("High score: ");
+        StringBuilder nameText = new StringBuilder();
+        nameText.append("By: ");
+        if (scoreList.size() > 0) {
+            scoreText.append(scoreList.get(0).getScore());
+            nameText.append(scoreList.get(0).getName());
+        }
+        highScore.setText(scoreText.toString());
+        scorePerson.setText(nameText.toString());
+    }
+
     public void addScore(String _name, int _number) {
         Score score = new Score(_name, _number);
         scoreList.add(score);
         Collections.sort(scoreList);    // Sorts list by score
 
-        highScore.setText("High score:" + String.valueOf(scoreList.get(0).getScore()));
-        scorePerson.setText("By:" + scoreList.get(0).getName());
+        updateTextView();
 
         // Writing to a file
         WriteFileTask writerTaskObject = new WriteFileTask();
