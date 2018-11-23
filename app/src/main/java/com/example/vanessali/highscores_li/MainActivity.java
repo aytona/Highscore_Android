@@ -92,7 +92,8 @@ public class MainActivity extends Activity {
 
                 Intent intent = new Intent(getApplicationContext(), DisplayActivity.class);
                 intent.putParcelableArrayListExtra(LIST_NAME, scoreList);
-                startActivityForResult(intent, REGISTER_DISPLAY);
+                startActivity(intent);
+                //startActivityForResult(intent, REGISTER_DISPLAY);
             }
         });
 

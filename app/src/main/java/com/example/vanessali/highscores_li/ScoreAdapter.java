@@ -8,16 +8,13 @@ import android.widget.TextView;
 
 import com.example.vanessali.highscores_li.model.Score;
 
-
 import java.util.ArrayList;
 
 public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.myViewHolder> {
-    //hold the data in the adapter
-    public ArrayList<Score> namesOfScores;
 
-    //constructor that accepts the Scores array
+    public ArrayList<Score> namesOfScores;  // Data passed on by the intent
+
     public ScoreAdapter(ArrayList<Score> adaptScores){
-
         namesOfScores = adaptScores;
     }
 
@@ -34,33 +31,27 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.myViewHolder
 
     }
 
-    /*
-    * @param parent the parent viewgroup the recycler view
-    * @param number is view type of the new view*/
-
     @Override
     public ScoreAdapter.myViewHolder onCreateViewHolder (ViewGroup parent, int  viewType) {
-
         LinearLayout layout = (LinearLayout) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.activity_display, parent, false);
-
+                .inflate(R.layout.recycler_display, parent, false);
         myViewHolder viewHolder = new myViewHolder(layout);
 
         return viewHolder;
-
     }
 
-    /*this is called by the layout manager when it needs a new  view to display  in the recycler view
-    * @param holder the older that id being reused
-    * @position is the position in the recycler View*/
     @Override
-    public void onBindViewHolder(ScoreAdapter.myViewHolder holder , int position){
-        holder.nameView.setText(namesOfScores.get(position).getName());
-        holder.scoreView.setText(namesOfScores.get(position).getScore());
+    public void onBindViewHolder(myViewHolder holder , int position){
+        Score score = namesOfScores.get(position);      // The individual score
+        holder.nameView.setText(score.getName());
+        StringBuilder scoreText = new StringBuilder();
+        scoreText.append("Score: ");
+        scoreText.append(score.getScore());
+        holder.scoreView.setText(scoreText.toString());
     }
 
     @Override
     public int getItemCount(){
-        return namesOfScores.size(); //total number of elements in the the list
+        return namesOfScores.size();
     }
 }
