@@ -166,7 +166,6 @@ public class MainActivity extends Activity {
                 FileInputStream fis = new FileInputStream(file);
                 Scanner scanner = new Scanner(fis);
 
-
                 while (scanner.hasNextLine()) {//Keep reading the file as long as there's data
                     String line = scanner.nextLine();
                     String[] data = line.split(",");
