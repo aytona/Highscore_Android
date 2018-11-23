@@ -55,8 +55,8 @@ public class MainActivity extends Activity {
 
         file = new File(getFilesDir().getAbsolutePath() + "/" + FILE_NAME);
         if (file.exists()) {
-            //ReadFileTask readerTask = new ReadFileTask();
-            //readerTask.execute();
+            ReadFileTask readerTask = new ReadFileTask();
+            readerTask.execute();
         } else {
             try {
                 file.createNewFile();
@@ -159,41 +159,34 @@ public class MainActivity extends Activity {
         }
     }
 
-    public class ReadFileTask extends AsyncTask<String, Integer, String[]> {
+    public class ReadFileTask extends AsyncTask<String, Integer, String> {
         @Override
-        protected String[] doInBackground(String... strings) {
-            //Reading the file and putting it the array list
-            FileInputStream fis;
-            //getting the fis from the context method
+        protected String doInBackground(String... strings) {
             try {
-                fis = openFileInput(FILE_NAME); //reading the stream = scores.txt
-            } catch (FileNotFoundException e) {
-                return new String[0];
+                FileInputStream fis = new FileInputStream(file);
+                Scanner scanner = new Scanner(fis);
+
+
+                while (scanner.hasNextLine()) {//Keep reading the file as long as there's data
+                    String line = scanner.nextLine();
+                    String[] data = line.split(",");
+                    Score newScore = new Score(data[1], Integer.valueOf(data[0]));
+                    scoreList.add(newScore);
+                }
+                scanner.close();//close scanner = close fis
+
+                Collections.sort(scoreList);
+                updateTextView();
+
+                return "Existing data read";
+            } catch(FileNotFoundException e) {
+                return "File cannot be found";
             }
-
-            Scanner scanner = new Scanner(fis);
-            StringBuilder file = new StringBuilder();
-
-            while (scanner.hasNextLine()) {//Keep reading the file as long as there's data
-                file.append(scanner.hasNextLine()).append("\n");//append string with line break
-            }
-            scanner.close();//close scanner = close fis
-
-            // splitting up strings OF scores.txt into individual strings
-            String fileString = file.toString();
-            String[] scoresArray = fileString.split("\\n");
-            return scoresArray;
         }
 
         @Override
-        protected void onPostExecute(String[] scoresArray) {
-            //loops through the string array turning each one into score object and adding to array list (ScoreList)
-            for(int i =0; i< scoresArray.length; i++){
-                Score newScore = new Score(scoresArray[i]); // converts line to object
-                scoreList.add(newScore);//gives object to arraylist
-            }
-            Collections.sort(scoreList);
-            updateTextView();
+        protected void onPostExecute(String msg) {
+            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
         }
     }
 
