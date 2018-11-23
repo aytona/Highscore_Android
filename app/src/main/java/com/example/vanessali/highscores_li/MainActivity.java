@@ -1,41 +1,27 @@
 package com.example.vanessali.highscores_li;
 
+import com.example.vanessali.highscores_li.model.Score;
+
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
-import android.os.Parcel;
-
-import android.os.Parcelable;
-import android.print.pdf.PrintedPdfDocument;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-
-import com.example.vanessali.highscores_li.model.Score;
-
-import org.w3c.dom.Text;
-
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
 public class MainActivity extends Activity {
+
     private Button submitButton;
     private Button viewAllButton;
     private Button resetButton;
@@ -44,9 +30,6 @@ public class MainActivity extends Activity {
     private TextView highScore;
     private TextView scorePerson;
     private ArrayList<Score> scoreList;
-
-    private TextView DummyOutput;
-
 
     // use a constant for the file name
     private static final String FILE_NAME = "scores.txt";
@@ -64,9 +47,6 @@ public class MainActivity extends Activity {
         nameInput = findViewById(R.id.edt_name);
         highScore = findViewById(R.id.txt_score);
         scorePerson = findViewById(R.id.txt_person);
-
-
-        DummyOutput = findViewById(R.id.tester);
 
         scoreList = new ArrayList<Score>();
 
@@ -120,17 +100,18 @@ public class MainActivity extends Activity {
 
     public void addScore(String _name, int _number) {
         Score score = new Score(_name, _number);
-        highScore.setText("High score:" + String.valueOf(_number));
-        scorePerson.setText("By:" + _name);
         scoreList.add(score);
+        Collections.sort(scoreList);    // Sorts list by score
 
-        Collections.sort(scoreList);
+        highScore.setText("High score:" + String.valueOf(scoreList.get(0).getScore()));
+        scorePerson.setText("By:" + scoreList.get(0).getName());
 
         // Writing to a file
         WriteFileTask writerTaskObject = new WriteFileTask();
         writerTaskObject.execute(score);
     }
 
+    // TODO Write to file does not work
     public class WriteFileTask extends AsyncTask<Score, Void, String> {
         @Override
         protected String doInBackground(Score... newScore) {
@@ -154,6 +135,7 @@ public class MainActivity extends Activity {
         }
     }
 
+    // TODO Read from file does not work
     public class ReadFileTask extends AsyncTask<String, Integer, String[]> {
         @Override
         protected String[] doInBackground(String... strings) {
@@ -184,6 +166,7 @@ public class MainActivity extends Activity {
         protected void onPostExecute(String[] scoresArray) {
             //loops through the string array turning each one into score object and adding to array list (ScoreList)
             for(int i =0; i< scoresArray.length; i++){
+                // TODO Add sorting once reading from file is fixed
                 Score newScore = new Score(scoresArray[i]); // converts line to object
                 scoreList.add(newScore);//gives object to arraylist
             }

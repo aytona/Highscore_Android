@@ -4,9 +4,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import java.util.Collections;
 
 public class Score implements Parcelable, Comparable<Score> {
+
+    private String name;
+    private int score;
 
     public Score(String userName ,int userNumber){ //if using to string you need to add display string in the paramters
         name = userName;
@@ -58,9 +60,6 @@ public class Score implements Parcelable, Comparable<Score> {
         return String.format("%d,%s", score, name );
     }
 
-    private String name;
-    private int score;
-
     public static final Creator<Score> CREATOR = new Creator<Score>() {
         @Override
         public Score createFromParcel(Parcel source) {
@@ -73,15 +72,9 @@ public class Score implements Parcelable, Comparable<Score> {
         }
     };
 
-    // TODO: Remove
-    @Override
-    public String toString() {
-        return name + "," + score + "\n";
-    }
-
     @Override
     public int compareTo(@NonNull Score compareScore) {
         int compScore = compareScore.getScore();
-        return this.score-compScore;
+        return compScore-this.score;
     }
 }
