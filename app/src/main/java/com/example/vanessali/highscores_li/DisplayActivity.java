@@ -22,10 +22,11 @@ public class DisplayActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display);
 
+        //Retrieving the data from the array list from main activity
         Intent intent = getIntent();
-
         ArrayList<Score> scoreList = intent.getParcelableArrayListExtra(MainActivity.LIST_NAME);
 
+        //Formatting the recycler View
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(false);     // If content doesn't change layout size
 
@@ -40,6 +41,7 @@ public class DisplayActivity extends Activity {
 
         recyclerView.setLayoutManager(layoutManager);
 
+        //Getting the score list from the array adapter and setting it inside the recycler view
         recyclerAdapter = new ScoreAdapter(scoreList);
         recyclerView.setAdapter(recyclerAdapter);
 
