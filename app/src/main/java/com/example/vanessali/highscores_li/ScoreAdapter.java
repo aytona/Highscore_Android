@@ -1,12 +1,12 @@
 package com.example.vanessali.highscores_li;
 
+import com.example.vanessali.highscores_li.model.Score;
+
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.example.vanessali.highscores_li.model.Score;
 
 import java.util.ArrayList;
 

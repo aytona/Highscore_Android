@@ -1,14 +1,14 @@
 package com.example.vanessali.highscores_li;
 
+import com.example.vanessali.highscores_li.model.Score;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
-import com.example.vanessali.highscores_li.model.Score;
 import java.util.ArrayList;
 
 public class DisplayActivity extends Activity {
