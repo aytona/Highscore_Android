@@ -168,8 +168,8 @@ public class MainActivity extends Activity {
 
                 while (scanner.hasNextLine()) {//Keep reading the file as long as there's data
                     String line = scanner.nextLine();
-                    String[] data = line.split(",");
-                    Score newScore = new Score(data[1], Integer.valueOf(data[0]));
+                    String[] data = line.split(":");
+                    Score newScore = new Score(data[0], Integer.valueOf(data[1]));
                     scoreList.add(newScore);
                 }
                 scanner.close();//close scanner = close fis

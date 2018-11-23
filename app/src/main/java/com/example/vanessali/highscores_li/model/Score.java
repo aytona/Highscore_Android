@@ -17,11 +17,11 @@ public class Score implements Parcelable, Comparable<Score> {
 
     public Score(String string){
         //separating string values
-        String[] scoreAttributes = string.split(",");
+        String[] scoreAttributes = string.split(":");
 
         //sets the attributes
-        score =Integer.parseInt(scoreAttributes[0]);//
-        name = scoreAttributes[1];
+        score = Integer.parseInt(scoreAttributes[1]);//
+        name = scoreAttributes[0];
     }
 
     protected Score(Parcel in) {
@@ -57,7 +57,7 @@ public class Score implements Parcelable, Comparable<Score> {
     }
 
     public String toFile(){
-        return String.format("%d,%s", score, name );
+        return String.format("%s:%d", name, score);
     }
 
     public static final Creator<Score> CREATOR = new Creator<Score>() {
