@@ -35,7 +35,7 @@
         android:layout_marginTop="10dp"
         android:ems="10"
         android:hint="enter score:"
-        android:inputType="textPersonName" />
+        android:inputType="number" />
 
     <EditText
         android:id="@+id/edt_name"
