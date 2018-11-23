@@ -12,8 +12,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ public class MainActivity extends Activity {
     private TextView highScore;
     private TextView scorePerson;
     private ArrayList<Score> scoreList;
+    private File file;
 
     // use a constant for the file name
     private static final String FILE_NAME = "scores.txt";
@@ -50,8 +53,17 @@ public class MainActivity extends Activity {
 
         scoreList = new ArrayList<Score>();
 
-        ReadFileTask readerTask = new ReadFileTask();
-        readerTask.execute();
+        file = new File(getFilesDir().getAbsolutePath() + "/" + FILE_NAME);
+        if (file.exists()) {
+            //ReadFileTask readerTask = new ReadFileTask();
+            //readerTask.execute();
+        } else {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +93,8 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 scoreList.clear();
+                ClearFileTask clearTaskObj = new ClearFileTask();
+                clearTaskObj.execute(file);
                 updateTextView();
             }
         });
@@ -124,18 +138,15 @@ public class MainActivity extends Activity {
         writerTaskObject.execute(score);
     }
 
-    // TODO Write to file does not work
     public class WriteFileTask extends AsyncTask<Score, Void, String> {
         @Override
         protected String doInBackground(Score... newScore) {
-            FileOutputStream fos = null;
             try {
-                fos = openFileOutput(FILE_NAME, MODE_APPEND);
-                PrintWriter outputWriter = new PrintWriter(fos); //converts from character stream to byte streams
-                String scoreToFile = newScore[0].toFile(); //converts score into string representation, accessing at index [0]  bc newScore is an array ,
-                outputWriter.println(scoreToFile);//writing the score to the file
+                FileOutputStream fos = new FileOutputStream(file,true);
+                PrintWriter outputWriter = new PrintWriter(fos);
+                outputWriter.println(newScore[0].toFile());
                 outputWriter.close();
-            } catch (FileNotFoundException e) {
+            } catch(FileNotFoundException e) {
                 return "File not found";
             }
             return "Score added";
@@ -148,7 +159,6 @@ public class MainActivity extends Activity {
         }
     }
 
-    // TODO Read from file does not work
     public class ReadFileTask extends AsyncTask<String, Integer, String[]> {
         @Override
         protected String[] doInBackground(String... strings) {
@@ -179,10 +189,31 @@ public class MainActivity extends Activity {
         protected void onPostExecute(String[] scoresArray) {
             //loops through the string array turning each one into score object and adding to array list (ScoreList)
             for(int i =0; i< scoresArray.length; i++){
-                // TODO Add sorting once reading from file is fixed
                 Score newScore = new Score(scoresArray[i]); // converts line to object
                 scoreList.add(newScore);//gives object to arraylist
             }
+            Collections.sort(scoreList);
+            updateTextView();
+        }
+    }
+
+    public class ClearFileTask extends AsyncTask<File, Integer, String> {
+        @Override
+        protected String doInBackground(File... files) {
+            try {
+                FileOutputStream fos = new FileOutputStream(files[0], false);
+                fos.close();
+            } catch (FileNotFoundException e) {
+                return "File not Found";
+            } catch (IOException e) {
+                return "Can't access file";
+            }
+            return "Cleared File";
+        }
+
+        @Override
+        protected void onPostExecute(String msg) {
+            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
         }
     }
 }

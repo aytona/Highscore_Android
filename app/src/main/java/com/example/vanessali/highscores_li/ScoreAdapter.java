@@ -29,7 +29,6 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.myViewHolder
             nameView = layout.findViewById(R.id.textName);
             scoreView = layout.findViewById(R.id.textScore);
         }
-
     }
 
     @Override
