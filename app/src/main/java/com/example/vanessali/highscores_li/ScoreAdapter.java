@@ -14,7 +14,8 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.myViewHolder
 
     public ArrayList<Score> namesOfScores;  // Data passed on by the intent
 
-    public ScoreAdapter(ArrayList<Score> adaptScores){
+    public ScoreAdapter(ArrayList<Score> adaptScores)
+    {
         namesOfScores = adaptScores;
     }
 
