@@ -44,9 +44,5 @@ public class DisplayActivity extends Activity {
         //Getting the score list from the array adapter and setting it inside the recycler view
         recyclerAdapter = new ScoreAdapter(scoreList);
         recyclerView.setAdapter(recyclerAdapter);
-
-
-
-
     }
 }
