@@ -32,6 +32,7 @@ import org.w3c.dom.Text;
 
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class MainActivity extends Activity {
@@ -50,8 +51,6 @@ public class MainActivity extends Activity {
     // use a constant for the file name
     private static final String FILE_NAME = "scores.txt";
     public static final String LIST_NAME = "ScoreList";
-    private static final int REGISTER_DISPLAY = 1;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,26 +73,27 @@ public class MainActivity extends Activity {
         ReadFileTask readerTask = new ReadFileTask();
         readerTask.execute();
 
-
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                validateInput();        // TODO: Change since it returns a bool
+                String score = scoreInput.getText().toString();
+                String name = nameInput.getText().toString();
+                if (validateInput(name, score)) {
+                    addScore(name, Integer.parseInt(score));
+                } else {
+                    Toast.makeText(getApplicationContext(), "Unable to add record", Toast.LENGTH_LONG).show();
+                }
                 scoreInput.setText(null);
                 nameInput.setText(null);
-
-
             }
         });
 
         viewAllButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(getApplicationContext(), DisplayActivity.class);
                 intent.putParcelableArrayListExtra(LIST_NAME, scoreList);
                 startActivity(intent);
-                //startActivityForResult(intent, REGISTER_DISPLAY);
             }
         });
 
@@ -103,17 +103,10 @@ public class MainActivity extends Activity {
 
             }
         });
-
-
     }
 
-    public boolean validateInput() {
-
+    public boolean validateInput(String name, String score) {
         boolean isInputValid = true;
-
-        String score = scoreInput.getText().toString();
-        String name = nameInput.getText().toString();
-
         if (score.isEmpty()) {
             scoreInput.setError("Must enter valid input");
             isInputValid = false;
@@ -121,87 +114,56 @@ public class MainActivity extends Activity {
         if (name.isEmpty()) {
             nameInput.setError("Must Enter valid input");
             isInputValid = false;
-        } else {
-            addScore(name, Integer.parseInt(score));
         }
-
         return isInputValid;
     }
 
     public void addScore(String _name, int _number) {
-
-        //accessing Score class
         Score score = new Score(_name, _number);
-
-
         highScore.setText("High score:" + String.valueOf(_number));
         scorePerson.setText("By:" + _name);
-
-        //Toast.makeText(this, " New High Score Added ", Toast.LENGTH_LONG).show();
-
         scoreList.add(score);
 
+        Collections.sort(scoreList);
 
-        //writing new score to a file
+        // Writing to a file
         WriteFileTask writerTaskObject = new WriteFileTask();
         writerTaskObject.execute(score);
-
-
-
-
-
     }
-
 
     public class WriteFileTask extends AsyncTask<Score, Void, String> {
         @Override
         protected String doInBackground(Score... newScore) {
-            FileOutputStream fos = null; //
-
-
+            FileOutputStream fos = null;
             try {
                 fos = openFileOutput(FILE_NAME, MODE_APPEND);
                 PrintWriter outputWriter = new PrintWriter(fos); //converts from character stream to byte streams
-
-
                 String scoreToFile = newScore[0].toFile(); //converts score into string representation, accessing at index [0]  bc newScore is an array ,
-
                 outputWriter.println(scoreToFile);//writing the score to the file
-
                 outputWriter.close();
-
-
             } catch (FileNotFoundException e) {
-                return "file not found";
+                return "File not found";
             }
-
-            return "IT FUCKING WORKED";
+            return "Score added";
         }
 
         @Override
         protected void onPostExecute(String s) {
+            // Show message if data is inputted or not
             Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
-
         }
-
     }
 
-
     public class ReadFileTask extends AsyncTask<String, Integer, String[]> {
-
-
         @Override
         protected String[] doInBackground(String... strings) {
             //Reading the file and putting it the array list
-
-            FileInputStream fis;//declaring the input stream
-
+            FileInputStream fis;
             //getting the fis from the context method
             try {
                 fis = openFileInput(FILE_NAME); //reading the stream = scores.txt
             } catch (FileNotFoundException e) {
                 return new String[0];
-                //return " TRY AGAIN CANT READ"; //try and catch for error handling
             }
 
             Scanner scanner = new Scanner(fis);
@@ -212,14 +174,10 @@ public class MainActivity extends Activity {
             }
             scanner.close();//close scanner = close fis
 
-            // literally splitting up strings OF scores.txt into individual strings
+            // splitting up strings OF scores.txt into individual strings
             String fileString = file.toString();
             String[] scoresArray = fileString.split("\\n");
             return scoresArray;
-
-
-
-            //return file.toString(); //return the string that was read in
         }
 
         @Override
@@ -228,12 +186,8 @@ public class MainActivity extends Activity {
             for(int i =0; i< scoresArray.length; i++){
                 Score newScore = new Score(scoresArray[i]); // converts line to object
                 scoreList.add(newScore);//gives object to arraylist
-
             }
-
         }
-
-
     }
 }
 
