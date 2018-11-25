@@ -16,9 +16,9 @@ An android app that records user names and scores, displays them in descending o
 
 ## Authors
 
-@aytona - Christopher
+[@aytona](https://github.com/aytona) - Christopher
 
-@vli034 - Vanessa
+[@vli034](https://github.com/vli034) - Vanessa
 
 ## License
 
