@@ -12,8 +12,7 @@ An android app that records user names and scores, displays them in descending o
 
 ## Preview
 
-<img src="docs/MainActivity.png width="600"/>
-<img src="docs/RecyclerView.png width="600"/>
+![Main Activity](docs/MainActivity.png) ![Recycler View](docs/RecyclerView.png)
 
 ## Authors
 
